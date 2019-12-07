@@ -1,0 +1,4 @@
+1 download node.js
+2 open terminal after installing node.js. type "npm --version" to make sure you have it installed.
+3 install angular/cli: "sudo npm install -g @angular/cli"
+4
