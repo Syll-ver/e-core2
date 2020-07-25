@@ -26,20 +26,20 @@ $user = htmlspecialchars($_SESSION["username"]);
        ?></p>
       </a>
     </li>
-    <li class="nav-item dropdown">
+<!--     <li class="nav-item dropdown">
       <a class="nav-item nav-link mr-md-2" href="#" id="notifdropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <span class="glyphicon glyphicon-bell">
           <?php
-          $notifCount = notifCount($user);
+          //$notifCount = notifCount($user);
           ?>
         </span>
       </a>
       <div class="dropdown-menu dropdown-menu-right" aria-labelledby="notifdropdown">
         <?php
-        $notification = notification($user);
+        //$notification = notification($user);
         ?>
       </div>
-    </li>
+    </li> -->
     <li class="nav-item dropdown">
       <a class="nav-item nav-link mr-md-2" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <span class="glyphicon glyphicon-user"></span>

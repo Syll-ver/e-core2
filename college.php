@@ -1,11 +1,11 @@
 <?php
 // Initialize the session
 session_start();
- 
+
 // Check if the user is logged in, if not then redirect him to login page
 if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
-    header("location: login.php");
-    exit;
+  header("location: login.php");
+  exit;
 }
 
 include_once("includeThis/adFunction.php");
@@ -18,44 +18,49 @@ when using single quotation, escaping the string is an option: "\" like $string 
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>College</title>
-    <!-- Bootstrap core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="assets/css/style.css" rel="stylesheet">
-    <link href="css/bootstrap.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.min.css">
-    <link href="assets/js/bootstrap.js" rel="stylesheet">s
-  </head>
-  <body>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>College</title>
+  <!-- Bootstrap core CSS -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/css/styles.css" rel="stylesheet">
+  <link href="css/bootstrap.css" rel="stylesheet">
+  <!-- <link href="assets/js/bootstrap.js" rel="stylesheet"> -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" type="text/css" href="DataTables/datatables.min.css"/>
+  <link rel="stylesheet" href="sweetalert2.min.css">
+  <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
 
-    <!--navbar-->
-    <?php include "includes/navbar.php";?>
-    <!--#end navbar-->
+</head>
+<body>
 
-    <section id="breadcrumb">
-      <div class="container">
-        <nav class="breadcrumb col-md-12"  style="background-color: white;">
-          <div class="col-md-12" style="padding: 10px;">
-            <h4 style="margin: 0; padding: 0;">ADMINISTRATOR AREA</h4>
-            <span class="breadcrumb-item active">College</span>
-          </div>
-      <!-- Breadcrumb Menu-->
-        </nav>
-      </div>
-    </section>
-    <!--#end breadcrumb-->
+  <!--navbar-->
+  <?php include "includes/navbar.php";?>
+  <!--#end navbar-->
 
-    <section id="main">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-3">
-            <div class="list-group">
-              <a href="index.php" class="list-group-item">
-                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Dashboard</a>
+  <section id="breadcrumb">
+    <div class="container">
+      <nav class="breadcrumb col-md-12"  style="background-color: white;">
+        <div class="col-md-12" style="padding: 10px;">
+          <h4 style="margin: 0; padding: 0;">ADMINISTRATOR AREA</h4>
+          <span class="breadcrumb-item active">College</span>
+        </div>
+        <!-- Breadcrumb Menu-->
+      </nav>
+    </div>
+  </section>
+  <!--#end breadcrumb-->
+
+  <section id="main">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="list-group">
+            <a href="index.php" class="list-group-item">
+              <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Dashboard</a>
               <a href="reservation.php" class="list-group-item"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Reservation </a>
               <a href="courseOffers.php" class="list-group-item"><span class="glyphicon glyphicon-level-up" aria-hidden="true"></span> Course Offering</a>
               <a href="course.php" class="list-group-item"><span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span> Courses</a>
@@ -69,244 +74,413 @@ when using single quotation, escaping the string is an option: "\" like $string 
 
 
           <div class="col-md-9">
-<!--             <?php
-            
-            $full = $_SERVER['QUERY_STRING'];
-            college_alert($full);
-
-            ?> -->
-            <!--Manage Courses-->
-            <!--remove ang department from selections, but put department on the table-->
-
-
             <div class="panel panel-default">
               <div class="panel-heading mb-3 col-md-12" style="background-color: #cc6666; border-color: #cc6666">
-                  <h3 class="panel-title" style="color: white;">College</h3>
+                <h3 class="panel-title" style="color: white;">College</h3>
               </div>
 
-                <div class="panel-body">
-                  <div class="row">                   
-                    <div class="col-md-12 mn" align="right">
-                      <!-- <button class="btn text-white" type="button" href="college_addCollege.php" data-toggle="modal" data-target="#addCollege" title="Add College" style="background-color: #cc6666; border-color: #ffffff">Add New College</button> -->
-                      <button class="btn text-white" type="button" data-toggle="modal" data-target="#addCollege" title="Add College" style="background-color: #cc6666; border-color: #ffffff">Add New College</button>
-                    </div>
+              <div class="panel-body">
+                <div class="row">                   
+                  <div class="col-md-12 mn" align="right">
+                    <label class="col-md-4 control-label">Choose CSV File</label> 
+                    <input  type="file" name="exportfile" id="exportfile" accept=".csv">
+                    <button type="submit" id="importfile" name="importfile" class="btn-submit">Import</button>
+                    <button class="btn text-white" type="button" data-toggle="modal" data-target="#addCollege" title="Add College" style="background-color: #cc6666; border-color: #ffffff">Add New College</button>
+                    <button class="btn text-white" type="button" data-toggle="modal" data-target="#settings" style="background-color: #cc6666; border-color: #ffffff">Settings</button>
                   </div>
-                    <!--title here-->
-                    <table class="table table-hover">
-                    <thead>
-                      <tr>
-                       
-                        <th>College Code</th>
-                        <th>College Name</th>
-                        <th></th>
-                      </tr>
-                    </thead>
-                    <tbody id="tbody">
-                       <?php
-                      $result = college();
-                      foreach($result as $row) {
-                        echo "<tr>";
-                        echo "<td>".$row['collegeCode']."</td>";
-                        echo "<td>".$row['collegeName']."</td>";
-                        echo "<td> <button href='college_editCollege.php?oldcode=".urlencode(http_build_query($row))."' class='btn btn-primary' type='button' data-toggle='modal' data-target='#editCollege' title='Edit College'>Edit</button> <button class='btn btn-danger delt' name='delt' id='delt' data-id='".$row['collegeCode']."' >Delete</button></td>";
-                        echo "</tr>";
-                        
-                      }
-                      ?>
-                    </tbody>
-                  </table>
+                </div>
+                <!--title here-->
+                <div class="table-responsive" id="showUser">
+                </div>
 
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!--Footer-->
+  <?php include "includes/footer.php";?>
+  <!--#end Footer-->
+
+<!-- Modals -->
+<!-- new dept -->
+    <div class="modal" id="addCollege" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">Add New College</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <!-- Modal Body -->
+          <div class="modal-body">
+            <form action="" method="post" id="form-addcollege">
+
+              <div class="row">
+                <div class="form-group col-sm-4">
+                  <label for="dcode">College Code</label>
+                  <input type="text" class="form-control" id="code" name="code" placeholder="College Code" required />
+                </div>
+
+                <div class="form-group col-md-8">
+                  <label for="dname">College Name</label>
+                  <input type="text" class="form-control" id="name" name="name" placeholder="College Name" required />
                 </div>
               </div>
-
-          </div>
-        </div>
-      </div>
-    </section>
-
-
-    <!--Footer-->
-    <?php include "includes/footer.php";?>
-    <!--#end Footer-->
-
-    <!-- Modals -->
-    <div class="modal" id="addCollege" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-      <div class="modal-dialog modal-md modal-dialog-centered" role="document">
-        <div class="modal-content">
-           <!-- college_addCollege.php -->
-           <div class="modal-header">
-            <h4 class="modal-title" id="myModalLabel">Add College</h4>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          </div>
-                  
-          <div class="modal-body"> 
-            <form role="form" name="addcollege" id="addcollege" autocomplete="off" >
-                  <div class="form-group col-md-4">
-                    <label for="coursecode">Code</label>
-                    <input type="text" class="form-control" id="code" name="code" placeholder="College Code" />
-                  </div>
-
-                  <div class="form-group col-md-8">
-                    <label for="coursename">College Name</label>
-                    <input type="text" class="form-control" id="name" name="name" placeholder="College Name" />
-                  </div>
             </form>
           </div>
+
           <div class="modal-footer">
             <input type="button" class="btn btn-secondary" data-dismiss="modal" value="Cancel" />
-            <input class="btn btn-primary" type="submit" name="submit" id="submit" value="Add" data-dismiss="modal"/>
+            <input type="submit" name="insert" id="insert" value="Add" class="btn btn-primary" />
           </div>  
-        <!-- </div> -->
-      </div>
-    </div>
-  </div>
-
-    <div class="modal" id="editCollege" role="dialog">
-      <div class="modal-dialog modal-md modal-dialog-centered">
-        <div class="modal-content">
-           <!-- college_editCollege.php -->
         </div>
       </div>
     </div>
 
-    <div class="modal" id="addDepartment" role="dialog">
-      <div class="modal-dialog">
+
+
+    <!-- edit dept -->
+    <div class="modal" id="editCollege" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-           <!-- college_addDepartment.php -->
+          <!-- Modal Header -->
+          <div class="modal-header">
+                <h4 class="modal-title">Edit College</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <!-- Modal Body -->
+                <div class="modal-body">
+                    <form action="" method="post" id="form-editcollege">
+                        <input type="hidden" name="ocode" id="ocode">
+
+                        <div class="row">
+                            <div class="form-group col-sm-4">
+                              <label for="edcode">College Code</label>
+                              <input type="text" class="form-control" id="ecode" name="ecode" required />
+                            </div>
+
+                            <div class="form-group col-md-8">
+                              <label for="edname">College Name</label>
+                              <input type="text" class="form-control" id="ename" name="ename" required />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                  <input type="button" class="btn btn-secondary" data-dismiss="modal" value="Cancel" />
+                  <input type="submit" name="update" id="update" value="Update" class="btn btn-primary" />
+                </div>  
+          
+          </div>
         </div>
-      </div>
     </div>
 
-    <div class="modal" id="editDepartment" role="dialog">
-      <div class="modal-dialog modal-md">
-        <div class="modal-content">
-           <!-- college_editDepartment.php -->
-        </div>
-      </div>
-    </div>
+            <div class="modal" id="settings" tabindex="-1" role="dialog">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
 
-    
+                  <div class="modal-header">
+                    <h3 class="modal-title" id="myModalLabel">Settings</h3>
+                  </div>
+                  <div class="modal-body">
+                    <form name="myFormer" id="myFormer" method="post">
 
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="js/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.all.min.js"></script>
-    <script src="js/tagsinput.js"></script>
-    <script src="js/typeahead.js"></script>
-    <script src="script_filterSearch.js"></script>
-    <script type="text/javascript">
+                      <input type="hidden" name="set_id" id="set_id">
 
-      // function fetch(){
-      //   $.ajax({
-      //     method: 'POST',
-      //     url: 'fetch_college.php',
-      //     success: function(response){
-      //       $('#tbody').html(response);
-      //     }
-      //   });
-      // }
+                      <div class="custom-control custom-switch">
+                        <label> Allow Chairperson to set Cut-off Scores: </label>
+                        <input type="checkbox" id="one" name="one" data-toggle="toggle">
+                        
+                      </div>
+                      <div class="custom-control custom-switch">
+                        <label> Bridging: </label>
+                        <input type="checkbox" id="two" name="two" data-toggle="toggle">
+                        
+                      </div>
 
-      // $(window).load(function(){
-      //           $('#onload').modal('show');
-      //       });
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                  <input class="btn btn-primary" type="submit" id="saving" value="Save" />
+                </div>
 
-      $("#submit").click(function(){
-        var name = $("#name").val();
-        var code = $("#code").val();
 
-        if(name == '' || code == ''){
-            swal("Oops!!", "Looks like you missed some fields. Please try again!", "error");
+
+
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  <script src="https://kit.fontawesome.com/aaae553ee8.js" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="DataTables/datatables.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+  <script src="sweetalert2.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+
+<script src="script_filterSearch.js"></script>
+<script type="text/javascript">
+  settings();
+
+  function settings(){
+    var setid = "1";
+    $.ajax({
+      url: "action.php",
+      type: "POST",
+      data: {setid:setid},
+      success:function(response){
+        var final = JSON.parse(response);
+        console.log(final);
+        console.log("final id: " + final.id + ', cpscores: '+ final.cpscores + ', bridging: '+ final.bridging);
+        
+        $("#set_id").val(final.id);
+
+        if(final.cpscores){
+          $('#one').bootstrapToggle('on');
         }else{
-            $.ajax({
-                type:'post',
-                url:'includeThis/college_add.php',
-                data: {name:name,code:code},
-                success:function(result){
-                   var json = JSON.parse(result);
-                   if(json == true){
-                    $('#submit').prop('disabled', true);
-                  swal({
-                     title: "Success!",
-                     text: "You have successfully added " + code + ": " + name,
-                     type: "success",
-                     confirmButtonText: "Ok",
-                     }).then((result) => {
-                        if(result.value){
-                                //this is your success swal, after clicking the yes button, it will reload or go to the other page.
-                                location.reload(); // this is your location reload.
-                                window.location.href='college.php'; // this is your relocate to other page.
-                         }
-                    })
-                  // } else {
-                  //   // swal("Error adding!", "Please try again", "Error"); 
-                  //   swal({
-                  //    title: "Error!",
-                  //    text: "Please check for error or duplicate with college code " + "\"" + code + "\"",
-                  //    type: "error",
-                  //    confirmButtonText: "Ok",
-                  //    // }).then((result) => {
-                  //    //     if(result.value){
-                  //    //            //this is your success swal, after clicking the yes button, it will reload or go to the other page.
-                  //    //            location.reload(); // this is your location reload.
-                  //    //            window.location.href='college.php'; // this is your relocate to other page.
-                  //    //     }
-                  //   })
-                  }
-              },
-              //di mag work
-              error:function(xhr, thrownError, ajaxOptions){
-                swal("Error adding!", "Please try again", "Error"); 
-              },
-            });
+          $('#one').bootstrapToggle('off');
         }
-    });
+
+        if(final.bridging){
+          $('#two').bootstrapToggle('on');
+        }else{
+          $('#two').bootstrapToggle('off');
+        }
+
+      }
+    })
+  }
 
 
 
-    $(document).on('click', '.delt', function(){
-    var id = $(this).data('id');
- 
-    swal({
-        title: 'You are about to delete college: ' + id + ".",
-        text: "You won't be able to revert this!",
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!',
-    }).then((result) => {
-        if (result.value){
-          $.ajax({
-            url: 'includeThis/college_delete.php',
-            type: 'POST',
-              data: 'id='+id,
-          })
-          .done(function(response){
-            swal({
-              title: "Success!",
-              text: "You have successfully deleted the college with college code " + id,
-              type: "success",
-              confirmButtonText: "Ok",
-            }).then((result) => {
-            if(result.value){
-            //this is your success swal, after clicking the yes button, it will reload or go to the other page.
-            location.reload(); // this is your location reload.
-            window.location.href='college.php'; // this is your relocate to other page.
-                         }
-                    })
-          })
-          .fail(function(){
-            swal('Oops...', 'Failed deleting college '+ id +'!', 'error');
+
+
+  $("#saving").click(function(e){
+    if($("#myFormer")[0].checkValidity()){
+      console.log("inside validity");
+      e.preventDefault();
+      $.ajax({
+        url: "action.php",
+        type: "POST",
+            data: $("#myFormer").serialize()+"&action=savesettings",
+            success:function(response){
+              console.log("inside response");
+              if(response = true){
+                Swal.fire({
+                  title: 'You have updated the settings',
+                  icon: 'success'
+                })
+                settings();
+                $("#settings").modal('hide');
+                $("#myFormer")[0].reset();
+                
+              } else {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Oops!',
+                  text: "You're entering a duplicate!"
+                });
+                $("#myFormer")[0].reset();
+              }
+            }
+
+            
+        })
+ }
+      
+    })
+
+
+  $(document).ready(function(){
+    showCollege();
+
+    function showCollege(){
+      $.ajax({
+        url: "action.php",
+        type: "POST",
+        data: {action:"viewcollege"},
+        success:function(response){
+          $("#showUser").html(response);
+          $("table").dataTable({
+            "dom": '<"top"l>rt<"bottom"ip><"clear">'
           });
         }
- 
+      });
+    }
+
+    $('#importfile').on('click', function () {
+      var file_data = $('#exportfile').prop('files')[0];
+      var form_data = new FormData();
+      form_data.append('file', file_data);
+      $.ajax({
+        url: 'action.php', // point to server-side PHP script 
+        dataType: 'text', // what to expect back from the PHP script
+        cache: false,
+        contentType: false,
+        processData: false,
+        data: form_data,
+        type: 'post',
+        success: function (response) {
+          console.log(response);
+          showCollege();
+          Swal.fire(
+            'Succes!',
+            'You have successfully imported a file',
+            'success'
+            )
+          
+        }
+      });
+    });
+
+  //insert ajax request
+    $("#insert").click(function(e){
+      var code = $("#code").val();
+      var name = $("#name").val();
+
+      if(code == '' || name == ''){
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops!',
+          text: 'Looks like you missed some fields. Please try again!',
+          footer: '<a href>Why do I have this issue?</a>'
+        })
+      }else{
+        if($("#form-addcollege")[0].checkValidity()){
+          e.preventDefault();
+          $.ajax({
+            url: "action.php",
+            type: "POST",
+            data: $("#form-addcollege").serialize()+"&action=insertcollege",
+            success:function(response){
+              data = response;
+              console.log(data);
+              if(data = "tama"){
+                Swal.fire({
+                  title: 'You have successfully added the ' + name + ' department',
+                  icon: 'success'
+                })
+                $("#addCollege").modal('hide');
+                $("#form-addcollege")[0].reset();
+                showCollege();
+              } else {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Oops!',
+                  text: "You're entering a duplicate!"
+                });
+                $("#form-addcollege")[0].reset();
+              }
+
+            }
+          });
+        }
+      }
     })
-});
-    </script>
-  </body>
+
+
+    $("body").on("click", ".editBtn", function(e){
+      e.preventDefault();
+      var edit_id = $(this).attr('id');
+      a = decodeURIComponent(edit_id);
+      b = a.split("=");
+      console.log(b[0]);
+      $("#ocode").val(b[0]);
+      $("#ecode").val(b[0]);
+      $("#ename").val(b[1]);
+    })
+
+    //update ajax request
+    $("#update").click(function(e){
+      var ocode = $("#ocode").val();
+      var ecode = $("#ecode").val();
+      var ename = $("#ename").val();
+
+      if(ocode =='' || ecode == '' || ename == ''){
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops!',
+          text: 'Looks like you missed some fields. Please try again!'
+        })
+      }else{
+
+        if($("#form-editcollege")[0].checkValidity()){
+          e.preventDefault();
+          $.ajax({
+            url: "action.php",
+            type: "POST",
+            data: $("#form-editcollege").serialize()+"&action=updatecollege",
+            success:function(response){
+              //data = response;
+              console.log(response);
+              //if(data = true){
+              Swal.fire({
+                title: 'You have successfully updated the ' + ename + ' department',
+                icon: 'success'
+              })
+              $("#editCollege").modal('hide');
+              $("#form-editcollege")[0].reset();
+              showCollege();
+            }
+          });
+        }
+      }
+    })
+
+
+    //delete ajax
+    $("body").on("click", ".delBtn", function(e){
+      e.preventDefault();
+      var tr = $(this).closest('tr');
+      del_id = $(this).attr('id');
+      a = decodeURIComponent(del_id);
+      b = a.split("=");
+      idcc = b[0];
+      var message = "You are about to delete the department: <br><h5>" +b[1] + "</h5>";
+      Swal.fire({
+        title: 'Are you sure?',
+        html: message,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'No, keep it'
+      }).then((result) => {
+        if(result.value){
+          $.ajax({
+            url:"action.php",
+            type:"POST",
+            data:{idcc:idcc},
+            success:function(response){
+              console.log(response);
+              if(response != false){
+                tr.css('background-color', '#ff6666');
+                Swal.fire(
+                  'Deleted!',
+                  'You have deleted the ' + b[1] + ' department',
+                  'success'
+                  )
+                showCollege();
+              } else if (response == false){
+                Swal.fire(
+                  'Oops!',
+                  'Error in deleting!',
+                  'error'
+                  )
+              }
+            }
+          });
+        }
+      });
+    });
+
+  });
+</script>
+</body>
 </html>

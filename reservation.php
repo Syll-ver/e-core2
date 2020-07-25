@@ -22,7 +22,12 @@ include_once("includeThis/adFunction.php");
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/css/styles.css" rel="stylesheet">
     <link href="css/bootstrap.css" rel="stylesheet">
-    <link href="assets/js/bootstrap.js" rel="stylesheet">
+    <!-- <link href="assets/js/bootstrap.js" rel="stylesheet"> -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" type="text/css" href="DataTables/datatables.min.css"/>
+    <link rel="stylesheet" href="sweetalert2.min.css">
+    
   </head>
 
   <body class="">
@@ -82,38 +87,12 @@ include_once("includeThis/adFunction.php");
                 </div>
                 <br>
             <!--table-->
-            <table class="table table-data table-hover">
-              <thead>
-                <tr>
-                  <th style="display: none">Year</th>
-                  <th>Student Name</th>
-                  <th>Strand</th>
-                  <th>Course</th>
-                  <th>College</th>
-                  <th>Status</th>
-                  <th>Date of Reservation</th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php
-                  $result = reservation();
-                  foreach ($result as $i) {
-                    echo "<tr>";
-                    echo "<td style='display: none'>".$i['acadYear']."</td>";
-                    echo "<td>".$i['name']."</td>";
-                    echo "<td>".$i['strand']."</td>";
-                    echo "<td>".$i['courseCode']."</td>";
-                    echo "<td>".$i['collegeCode']."</td>";
-                    echo "<td>".$i['status']."</td>";
-                    echo "<td>".date('F j, Y, g:i a', strtotime($i['dateReserved']))."</td>";
-                    echo "</tr>";
-                  }
-                ?>
-              </tbody>
-            </table>
+            <div class="table-responsive" id="showTable">
+            </div>
             <!--#end table-->
         </div>
       </div>
+    </div>
     </section>
 
 
@@ -147,18 +126,54 @@ include_once("includeThis/adFunction.php");
     </div>
 
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="js/jquery.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/tagsinput.js"></script>
-    <script src="js/typeahead.js"></script>
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/aaae553ee8.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="DataTables/datatables.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.29.2/sweetalert2.all.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script src="sweetalert2.min.js"></script>
     <script src="script_filterSearch.js"></script>
 
+    <script type="text/javascript">
+      $(document).ready(function(){
+        showReservation();
+
+        function showReservation(){
+          $.ajax({
+            url: "action.php",
+            type: "POST",
+            data: {action:"viewreservation"},
+            success:function(response){
+               //console.log(response);
+              $("#showTable").html(response);
+              $("table").dataTable({
+                  "dom": '<"top"l>rt<"bottom"ip><"clear">'
+                  
+                });
+            }
+          });
+        }
+
+
+        });
+
+      </script>
+    
+
     <script>
+      //datatable
+      // $(document).ready(function(){
+      //   $("table").Datatable();
+      // }); 
+
+
       //for textfield populate
       $(function(){
         $(document).on('click', '.btn-add', function(e){
